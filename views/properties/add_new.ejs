@@ -1,0 +1,35 @@
+<% layout("/layouts/boilerplate2") %>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <br /><br />
+        <h2>Create a new listing</h2>
+        
+        <form action="/propertyList" method="POST">
+            <div>
+                <label for="title">Title</label>
+                <input type="text" name="property[title]" id="title" required>
+            </div>
+            <div>
+                <label for="description">Description</label>
+                <input type="text" name="property[description]" id="description" required>
+            </div>
+            <div>
+                <label for="image">Image URL</label>
+                <input type="text" name="property[image]" id="image">
+            </div>
+            <div>
+                <label for="price">Price</label>
+                <input type="number" name="property[price]" id="price" required>
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" name="property[location]" id="location" required>
+            </div>
+            <div>
+                <label for="country">Country</label>
+                <input type="text" name="property[country]" id="country" required>
+            </div>
+            <button type="submit">Add Property</button>
+        </form>
+    </div>
+</div>

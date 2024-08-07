@@ -1,0 +1,35 @@
+<% layout("/layouts/boilerplate2") %>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <br /><br />
+        <h2>edit your listing</h2>
+        
+        <form  method="post" action="/properties/<%= showProperty._id %>?_method=PUT">
+            <div>
+                <label for="title">Title</label>
+                <input type="text" name="property[title]" id="title" value="<%= showProperty.title %>">
+            </div>
+            <div>
+                <label for="description">Description</label>
+                <input type="text" name="property[description]" id="description" value="<%= showProperty.description %>">
+            </div>
+            <div>
+                <label for="image">Image URL</label>
+                <input type="text" name="property[image]" id="image" value="<%= showProperty.image %>">
+            </div>
+            <div>
+                <label for="price">Price</label>
+                <input type="number" name="property[price]" id="price" value="<%= showProperty.price %>">
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" name="property[location]" id="location" value="<%= showProperty.location %>">
+            </div>
+            <div>
+                <label for="country">Country</label>
+                <input type="text" name="property[country]" id="country" value="<%= showProperty.country %>">
+            </div>
+            <button type="submit">edit</button>
+        </form>
+    </div>
+</div>

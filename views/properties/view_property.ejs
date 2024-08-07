@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>property detals</h3>
+        <ul>
+            <li><%= showProperty.title %></li>
+            <li><%= showProperty.description %></li>
+            <li>&#8377;<%= showProperty.price.toLocaleString("en-IN") %></li>
+            <li><%= showProperty.location %></li>
+            <li><%= showProperty.country %></li>
+        </ul>
+        <a href="/properties/<%= showProperty._id %>/edit">edit</a>
+        <form action="/properties/<%= showProperty._id %>?_method=DELETE" method="POST">
+            <button type="submit">Delete</button>
+        </form>
+    
+</body>
+</html>
