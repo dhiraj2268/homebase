@@ -3,10 +3,14 @@ const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user.js");
 const Contact = require("./models/contactUs.js");
-const property = require("./models/property.js");
+const Property = require("./models/property.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapeAsync= require("./utils/wrapAsync.js");
+const ExpressError= require("./utils/ExpressError.js");
+const {propertySchema}=require("./schema.js");
+const Review=require("./models/reviews.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -29,32 +33,49 @@ async function main() {
 }
 //----------------end---------------
 
+// Serve static files (put this above all routes)
+app.use(express.static(path.join(__dirname, "/public"))); 
+
 // Middleware to make the user object available in all views
-app.use((req, res, next) => {
-  res.locals.user = req.user || null;
-  next();
-});
+// app.use((req, res, next) => {
+//   res.locals.user = req.user || null;
+//   next();
+// });
 
-// Authentication Middleware
-function authenticateToken(req, res, next) {
-  const token = req.cookies.token;
-  if (!token) return next(); // Proceed without setting user if no token is present
+// // Authentication Middleware
+// function authenticateToken(req, res, next) {
+//   const token = req.cookies.token;
+//   if (!token) return next(); 
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.redirect("/login");
-    req.user = user; // Set the user object in the request
-    next();
-  });
-}
+//   jwt.verify(token, JWT_SECRET, (err, user) => {
+//     if (err) return res.redirect("/login");
+//     req.user = user; 
+//     next();
+//   });
+// }
 
 // Setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));  
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "/public")));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(cookieParser());
+
+//
+app.get("/",(req,res)=>{
+  res.send("hi i am mini project");
+});
+
+const validateProperty=(req,res,next)=>{
+    let{error}=propertySchema.validate(req.body);
+    if(error){
+      let errMsg= error.details.map((el)=>el.message).join(",");
+      throw new ExpressError(400, errMsg);
+    }else{
+      next();
+    }
+}
 
 // Home route
 app.get("/properties", (req, res) => {
@@ -62,50 +83,73 @@ app.get("/properties", (req, res) => {
 });
 
 // Index route for property listing
-app.get("/propertyList", authenticateToken, async (req, res) => {
-  const allListing = await property.find({});
+app.get("/propertyList", wrapeAsync( async (req, res) => {
+  const allListing = await Property.find({});
   res.render("properties/propertyList.ejs", { allListing });
-});
+}));
 
 // New property form route
-app.get("/propertyList/new", authenticateToken, (req, res) => {
+app.get("/propertyList/new", (req, res) => {
   res.render("properties/add_new.ejs");
 });
 
-// Show route
-app.get("/properties/:id", async (req, res) => {
-  let { id } = req.params;
-  const showProperty = await property.findById(id);
-  res.render("properties/view_property.ejs", { showProperty });
-});
+// Show route 
+app.get('/properties/:id', wrapeAsync(async (req, res) => {
+    const { id } = req.params;
+    const showProperty = await Property.findById(id);
+    if (!showProperty) {
+      return res.status(404).send("Property not found");
+    }
+    res.render('properties/view_property', { showProperty });
+}));
+
 
 // Create route
-app.post("/propertyList", authenticateToken, async (req, res) => {
-  const newProperty = new property(req.body.property);
+app.post("/propertyList", validateProperty,wrapeAsync (async (req, res) => {
+  if(!req.body.property){
+    throw new ExpressError(400,"send valid data for listing your property");
+  }
+  const newProperty = new Property(req.body.property);
   await newProperty.save();
   res.redirect("/propertyList");
-});
+}));
 
 // Render edit form route
-app.get("/properties/:id/edit", authenticateToken, async (req, res) => {
+app.get("/properties/:id/edit", wrapeAsync (async (req, res) => {
   let { id } = req.params;
-  const showProperty = await property.findById(id);
+  const showProperty = await Property.findById(id);
   res.render("properties/edit.ejs", { showProperty });
-});
+}));
 
 // Update route
-app.put("/properties/:id", authenticateToken, async (req, res) => {
+app.put("/properties/:id", validateProperty,wrapeAsync(async (req, res) => {
   let { id } = req.params;
-  await property.findByIdAndUpdate(id, { ...req.body.property });
+  await Property.findByIdAndUpdate(id, { ...req.body.property });
   res.redirect(`/properties/${id}`);
-});
+}));
 
 // Delete route
-app.delete("/properties/:id", authenticateToken, async (req, res) => {
+app.delete("/properties/:id", wrapeAsync(async (req, res) => {
   let { id } = req.params;
-  await property.findByIdAndDelete(id);
+  await Property.findByIdAndDelete(id);
   res.redirect("/propertyList");
+}));
+
+//review post route
+app.post("/properties/:id/reviews" , async(req,res)=>{
+
+  let showreview= await Property.findById(req.params.id);
+  let newReview= new Review(req.body.review);
+  showreview.reviews.push(newReview);
+  await newReview.save();
+  await showreview.save();
+  console.log("new review is saved");
+  res.send("review saved");
+
 });
+
+//--------end here-------//
+
 
 
 // Signup user
@@ -142,10 +186,8 @@ app.post("/login", async (req, res) => {
   } catch (error) {
     return res.render("signin" , {
       error : "Incorrect Email or Password" ,
-})
-
+    });
   }
-
 });
 
 // Logout route
@@ -154,7 +196,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/properties");
 });
 
-//contact us form
+// Contact us form
 app.get('/contact', (req, res) => {
   res.render("properties/contactus.ejs", { user: req.user });
 });
@@ -169,7 +211,20 @@ app.post("/contact", async (req, res) => {
       res.status(500).send("There was an error submitting your message.");
   }
 });
-//--------------
+
+//---------------
+app.all("*",(req,res,next)=>{
+  next(new ExpressError(404,"page not found"));
+});
+//-----------
+
+//error handling
+app.use((err,req,res,next)=>{
+  let {statusCode=500,message="somthing wend wrong"}=err;
+  res.status(statusCode).render("error.ejs",{ message });
+});
+//-------------
+
 // Start server
 app.listen(3003, () => {
   console.log("server is started on port 3003");

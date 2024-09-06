@@ -2,34 +2,99 @@
 <div class="row mt-3">
     <div class="col-8 offset-2">
         <br /><br />
-        <h2>edit your listing</h2>
+        <h2>Edit your Details</h2>
         
-        <form  method="post" action="/properties/<%= showProperty._id %>?_method=PUT">
-            <div>
-                <label for="title">Title</label>
-                <input type="text" name="property[title]" id="title" value="<%= showProperty.title %>">
-            </div>
-            <div>
-                <label for="description">Description</label>
-                <input type="text" name="property[description]" id="description" value="<%= showProperty.description %>">
-            </div>
-            <div>
-                <label for="image">Image URL</label>
-                <input type="text" name="property[image]" id="image" value="<%= showProperty.image %>">
-            </div>
-            <div>
-                <label for="price">Price</label>
-                <input type="number" name="property[price]" id="price" value="<%= showProperty.price %>">
-            </div>
-            <div>
-                <label for="location">Location</label>
-                <input type="text" name="property[location]" id="location" value="<%= showProperty.location %>">
-            </div>
-            <div>
-                <label for="country">Country</label>
-                <input type="text" name="property[country]" id="country" value="<%= showProperty.country %>">
-            </div>
-            <button type="submit">edit</button>
+        <form action="/properties/<%= showProperty._id %>?_method=put" method="post">
+            
+            <!-- --------------Edit  -->
+
+            <div class="form-group">
+                <label for="property-title"
+                  ><i class="fas fa-home"></i> Property Title</label
+                >
+                <input
+                  type="text"
+                  id="property-title"
+                  name="property[title]"
+                  value="<%= showProperty.title %>"
+                />
+              </div>
+    
+              <div class="form-group">
+                <label for="price"><i class="fas fa-dollar-sign"></i> Price</label>
+                <input type="number" id="price" name="property[price]" value="<%= showProperty.price %>"/>
+              </div>
+    
+              <div class="form-group">
+                <label for="description"
+                  ><i class="fas fa-align-left"></i> Description</label
+                >
+                <textarea id="description" name="property[description]" rows="4"><%= showProperty.description %></textarea>
+              </div>
+    
+              <div class="form-group">
+                <label for="location"
+                  ><i class="fas fa-map-marker-alt"></i> Location</label
+                >
+                <input type="text" id="location" name="property[location]" value="<%= showProperty.location %>"  />
+              </div>
+              <div class="form-group">
+                <label for="country"
+                  ><i class="fas fa-map-marker-alt"></i> Country</label
+                >
+                <input type="text" id="country" name="property[country]" value="<%= showProperty.country %>"  />
+              </div>
+    
+              <div class="form-group">
+                <label for="bedrooms"><i class="fas fa-bed"></i> Bedrooms</label>
+                <input type="number" id="bedrooms" name="property[bedrooms]"  value="<%= showProperty.bedrooms %>" />
+              </div>
+    
+              <div class="form-group">
+                <label for="bathrooms"><i class="fas fa-bath"></i> Bathrooms</label>
+                <input type="number" id="bathrooms" name="property[bathrooms]" value="<%= showProperty.bathrooms %>"  />
+              </div>
+    
+              <div class="form-group">
+                <label for="square-feet"
+                  ><i class="fas fa-ruler-combined"></i> Square Feet</label
+                >
+                <input type="number" id="square-feet" name="property[squarefeet]" value="<%= showProperty.squarefeet %>" />
+              </div>
+    
+              <div class="form-group">
+                <label for="property-image"
+                  ><i class="fas fa-image"></i> Property Image</label
+                >
+                <input
+                  type="file"
+                  id="property-image"
+                  name="property[image]"
+                  value="<%= showProperty.image %>"
+                  
+                />
+              </div>
+    
+              <div class="form-group">
+                <label for="seller-name"
+                  ><i class="fas fa-user"></i> Seller Name</label
+                >
+                <input type="text" id="sellername" name="property[sellername]" value="<%= showProperty.sellername %>"/>
+              </div>
+              <div class="form-group">
+                <label for="seller-contact"
+                  ><i class="fas fa-phone-alt"></i> Seller Contact</label
+                >
+                <input
+                  type="text"
+                  id="seller-contact"
+                  name="property[sellercontact]"
+                  value="<%= showProperty.sellercontact %>"
+                />
+              </div>
+              <button type="submit" class="submit-btn">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
         </form>
     </div>
 </div>

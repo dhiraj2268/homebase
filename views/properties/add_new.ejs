@@ -18,11 +18,13 @@
                   name="property[title]"
                   required
                 />
+                <!-- <div class="valid-feedback">Title looks good</div> -->
               </div>
     
               <div class="form-group">
                 <label for="price"><i class="fas fa-dollar-sign"></i> Price</label>
-                <input type="number" id="price" name="property[price]" required />
+                <input type="" id="price" name="property[price]" required />
+                <!-- <div class="invalid-feedback">please enter a valid price</div> -->
               </div>
     
               <div class="form-group">
@@ -35,13 +37,22 @@
                   rows="4"
                   required
                 ></textarea>
+                <!-- <div class="invalid-feedback">Please enter a sort description</div> -->
               </div>
     
               <div class="form-group">
                 <label for="location"
                   ><i class="fas fa-map-marker-alt"></i> Location</label
                 >
-                <input type="text" id="location" name="location[location]" required />
+                <input type="text" id="location" name="property[location]" required />
+                <!-- <div class="invalid-feedback">Location should be require</div> -->
+              </div>
+              <div class="form-group">
+                <label for="country"
+                  ><i class="fas fa-map-marker-alt"></i> country</label
+                >
+                <input type="text" id="location" name="property[country]" required />
+                <!-- <div class="invalid-feedback">Country should be require/div> -->
               </div>
     
               <div class="form-group">
@@ -66,7 +77,7 @@
                   ><i class="fas fa-image"></i> Property Image</label
                 >
                 <input
-                  type="text"
+                  type="file"
                   id="property-image"
                   name="property[image]"
                   
@@ -77,7 +88,7 @@
                 <label for="seller-name"
                   ><i class="fas fa-user"></i> Seller Name</label
                 >
-                <input type="text" id="seller-name" name="prpperty[sellername]" required />
+                <input type="text" id="seller-name" name="property[sellername]" required />
               </div>
     
               <div class="form-group">
@@ -93,7 +104,7 @@
               </div>
     
               <button type="submit" class="submit-btn">
-                <i class="fas fa-paper-plane"></i> Submit
+                <i class="fas fa-paper-plane"></i> Add
               </button>
         </form>
     </div>

@@ -943,110 +943,113 @@ a {
 \*-----------------------------------*/
 
 .footer {
-  background: var(--raisin-black-1);
-  color: var(--white);
-  margin-bottom: 68px;
+  background: var(--raisin-black-1) !important;
+  color: var(--white) !important;
+  margin-bottom: 68px !important;
 }
 
 .footer .container {
-  padding-inline: 30px;
+  padding-inline: 30px !important;
 }
 
 .footer a {
-  color: inherit;
+  color: inherit !important;
 }
 
 .footer-top {
-  padding-top: 80px;
-  padding-bottom: 40px;
+  padding-top: 80px !important;
+  padding-bottom: 40px !important;
 }
 
 .footer-brand {
-  margin-bottom: 70px;
+  margin-bottom: 70px !important;
 }
 
 .footer-brand .logo {
-  margin-bottom: 15px;
+  margin-bottom: 15px !important;
 }
 
 .footer-brand .logo img {
-  width: 262px;
+  width: 262px !important;
 }
 
 .section-text {
-  font-size: var(--fs-5);
-  line-height: 1.8;
-  margin-bottom: 30px;
-  max-width: 45ch;
+  font-size: var(--fs-5) !important;
+  line-height: 1.8 !important;
+  margin-bottom: 30px !important;
+  max-width: 45ch !important;
 }
 
 .contact-list {
-  display: grid;
-  gap: 15px;
-  margin-bottom: 30px;
+  display: grid !important;
+  gap: 15px !important;
+  margin-bottom: 30px !important;
 }
 
 .contact-link {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  text-decoration: none !important;
 }
 
 .contact-link ion-icon {
-  font-size: 18px;
+  font-size: 18px !important;
+  text-decoration: none !important;
 }
 
 .contact-link :is(address, span) {
-  font-size: var(--fs-5);
-  transition: var(--transition);
+  font-size: var(--fs-5) !important;
+  transition: var(--transition) !important;
 }
 
 .contact-link:is(:hover, :focus) span {
-  color: var(--orange-soda);
+  color: var(--orange-soda) !important;
 }
 
 .social-list {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
 }
 
 .footer-list:not(:last-child) {
-  margin-bottom: 50px;
+  margin-bottom: 50px !important;
 }
 
 .footer-list-title {
-  font-family: var(--ff-poppins);
-  font-size: var(--fs-3);
-  font-weight: var(--fw-700);
-  margin-bottom: 15px;
+  font-family: var(--ff-poppins) !important;
+  font-size: var(--fs-3) !important;
+  font-weight: var(--fw-700) !important;
+  margin-bottom: 15px !important;
 }
 
 .footer-link {
-  font-size: var(--fs-5);
-  padding-block: 10px;
+  font-size: var(--fs-5) !important;
+  padding-block: 10px !important;
+  text-decoration: none !important;
 }
 
 .footer-link:is(:hover, :focus) {
-  color: var(--orange-soda);
+  color: var(--orange-soda) !important;
 }
 
 .footer-bottom {
-  background: var(--raisin-black-2);
-  padding-block: 25px;
+  background: var(--raisin-black-2) !important;
+  padding-block: 25px !important;
 }
 
 .copyright {
-  font-size: var(--fs-5);
-  text-align: center;
+  font-size: var(--fs-5) !important;
+  text-align: center !important;
 }
 
 .copyright a {
-  display: inline-block;
+  display: inline-block !important;
 }
 
 .copyright a:is(:hover, :focus) {
-  color: var(--orange-soda);
+  color: var(--orange-soda) !important;
 }
 
 /*-----------------------------------*\

@@ -10,6 +10,7 @@ const propertySchema=new Schema({
       price: Number,
       description: String,
       location: String,
+      country:String,
       bedrooms:Number,
       bathrooms:Number,
       squarefeet:Number,
@@ -24,6 +25,12 @@ const propertySchema=new Schema({
       },
       sellername:String,
       sellercontact:String,
+      reviews:[
+        {
+          type: Schema.Types.ObjectId,
+          ref:"Review",
+        },
+      ],
 });
 
 const property=mongoose.model("property",propertySchema);
