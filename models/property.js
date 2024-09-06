@@ -1,7 +1,6 @@
 const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
-
-
+const Review=require("./reviews.js");
 const propertySchema=new Schema({
     title: {
         type: String,
@@ -31,6 +30,12 @@ const propertySchema=new Schema({
           ref:"Review",
         },
       ],
+});
+
+propertySchema.post("findOneAndDelete", async(showProperty)=>{
+  if(showProperty){
+    await Review.deleteMany({_id : {$in : showProperty.reviews}});
+  }
 });
 
 const property=mongoose.model("property",propertySchema);

@@ -132,19 +132,34 @@
         <hr>
         <div class="review">
           <h4>Leave a review</h4>
-          <form action="/properties/<%= showProperty._id %>/reviews" method="post " class="review-form">
+          <form action="/properties/<%= showProperty._id %>/reviews" method="post" class="review-form">
             <div class="rev">
               <label for="rating">Rating</label>
               <input type="range" name="review[rating]" id="rating" min="1" max="5">
             </div>
             <div class="rev-w">
               <label for="comment">Comment</label>
-              <textarea name="review[comment]"  id="comment" cols="30" rows="10"></textarea>
+              <textarea name="review[comment]"  id="comment" cols="30" rows="10" required></textarea>
             </div>
             <button class="r-btn">submit</button>
           </form>
         </div>
         <!-- end here -->
+
+          <!-- show review -->
+        <div class="rev-cls">
+          <p><b>All Reviews</b></p>
+          <ul class="rev-ul">
+            <% for(review of showProperty.reviews) {%>
+              <li class="rev-li"><%=review.comment%> , <%= review.rating %>
+              <form action="/properties/<%= showProperty._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                <button type="submit">Delete</button>
+              </form>
+            </li>
+              <% } %>
+          </ul>
+        </div>
+        <!-- ----------end here-------- -->
         </div>
       </section>
       <!-- The Modal -->

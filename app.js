@@ -9,11 +9,12 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapeAsync= require("./utils/wrapAsync.js");
 const ExpressError= require("./utils/ExpressError.js");
-const {propertySchema}=require("./schema.js");
+const {propertySchema,reviewSchema}=require("./schema.js");
 const Review=require("./models/reviews.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const wrapAsync = require("./utils/wrapAsync.js");
 
 const JWT_SECRET = "dhirajrohit";
 
@@ -76,6 +77,15 @@ const validateProperty=(req,res,next)=>{
       next();
     }
 }
+const validateReview=(req,res,next)=>{
+    let{error}=reviewSchema.validate(req.body);
+    if(error){
+      let errMsg= error.details.map((el)=>el.message).join(",");
+      throw new ExpressError(400, errMsg);
+    }else{
+      next();
+    }
+}
 
 // Home route
 app.get("/properties", (req, res) => {
@@ -96,7 +106,7 @@ app.get("/propertyList/new", (req, res) => {
 // Show route 
 app.get('/properties/:id', wrapeAsync(async (req, res) => {
     const { id } = req.params;
-    const showProperty = await Property.findById(id);
+    const showProperty = await Property.findById(id).populate("reviews");
     if (!showProperty) {
       return res.status(404).send("Property not found");
     }
@@ -136,7 +146,7 @@ app.delete("/properties/:id", wrapeAsync(async (req, res) => {
 }));
 
 //review post route
-app.post("/properties/:id/reviews" , async(req,res)=>{
+app.post("/properties/:id/reviews" , validateReview,wrapeAsync(async(req,res)=>{
 
   let showreview= await Property.findById(req.params.id);
   let newReview= new Review(req.body.review);
@@ -144,9 +154,20 @@ app.post("/properties/:id/reviews" , async(req,res)=>{
   await newReview.save();
   await showreview.save();
   console.log("new review is saved");
-  res.send("review saved");
+  res.redirect(`/properties/${req.params.id}`);
 
-});
+}));
+
+//delete review route
+
+app.delete("/properties/:id/reviews/:reviewId", wrapAsync(async(req,res)=>{
+  let {id,reviewId}=req.params;
+  await Property.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
+  await Review.findByIdAndDelete(reviewId);
+  res.redirect(`/properties/${id}`);
+}));
+
+//end here-----
 
 //--------end here-------//
 
