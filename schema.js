@@ -9,7 +9,7 @@ module.exports.propertySchema=Joi.object({
         country:Joi.string().required(),
         bedrooms:Joi.number().required(),
         bathrooms:Joi.number().required(),
-        squrefeet:Joi.number().required(),
+        squarefeet:Joi.number().required(),
         sellername:Joi.string().required(),
         sellercontact:Joi.string().required(),
         image:Joi.string().allow("",null),

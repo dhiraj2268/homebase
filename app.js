@@ -3,20 +3,32 @@ const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user.js");
 const Contact = require("./models/contactUs.js");
-const Property = require("./models/property.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapeAsync= require("./utils/wrapAsync.js");
 const ExpressError= require("./utils/ExpressError.js");
-const {propertySchema,reviewSchema}=require("./schema.js");
-const Review=require("./models/reviews.js");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const wrapAsync = require("./utils/wrapAsync.js");
+const properties=require("./routes/propertyRoute.js");
+const reviews=require("./routes/reviewRoute.js");
+const session=require("express-session");
+const flash=require("connect-flash");
 
-const JWT_SECRET = "dhirajrohit";
+
+
+
+const sessionOption={
+  secret:"miniproject",
+  resave:false,
+  saveUninitialized:true,
+  cookie:{
+    expires:Date.now() + 2 * 24 * 60 * 60 * 1000,
+    maxAge: 2 * 24 * 60 * 60 * 1000,
+  }
+};
+
+// app.use(session(sessionOption));
+// app.use(flash());
+
 
 //---------DB connection--------
 const MONGO_URL = "mongodb://127.0.0.1:27017/homebase";
@@ -37,24 +49,6 @@ async function main() {
 // Serve static files (put this above all routes)
 app.use(express.static(path.join(__dirname, "/public"))); 
 
-// Middleware to make the user object available in all views
-// app.use((req, res, next) => {
-//   res.locals.user = req.user || null;
-//   next();
-// });
-
-// // Authentication Middleware
-// function authenticateToken(req, res, next) {
-//   const token = req.cookies.token;
-//   if (!token) return next(); 
-
-//   jwt.verify(token, JWT_SECRET, (err, user) => {
-//     if (err) return res.redirect("/login");
-//     req.user = user; 
-//     next();
-//   });
-// }
-
 // Setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));  
@@ -63,115 +57,25 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(cookieParser());
 
-//
 app.get("/",(req,res)=>{
   res.send("hi i am mini project");
 });
 
-const validateProperty=(req,res,next)=>{
-    let{error}=propertySchema.validate(req.body);
-    if(error){
-      let errMsg= error.details.map((el)=>el.message).join(",");
-      throw new ExpressError(400, errMsg);
-    }else{
-      next();
-    }
-}
-const validateReview=(req,res,next)=>{
-    let{error}=reviewSchema.validate(req.body);
-    if(error){
-      let errMsg= error.details.map((el)=>el.message).join(",");
-      throw new ExpressError(400, errMsg);
-    }else{
-      next();
-    }
-}
+app.use(session(sessionOption));
+app.use(flash());
 
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  next();
+})
+
+
+app.use("/properties",properties);
+app.use("/properties/:id/reviews",reviews);
 // Home route
 app.get("/properties", (req, res) => {
   res.render("properties/index.ejs");
 });
-
-// Index route for property listing
-app.get("/propertyList", wrapeAsync( async (req, res) => {
-  const allListing = await Property.find({});
-  res.render("properties/propertyList.ejs", { allListing });
-}));
-
-// New property form route
-app.get("/propertyList/new", (req, res) => {
-  res.render("properties/add_new.ejs");
-});
-
-// Show route 
-app.get('/properties/:id', wrapeAsync(async (req, res) => {
-    const { id } = req.params;
-    const showProperty = await Property.findById(id).populate("reviews");
-    if (!showProperty) {
-      return res.status(404).send("Property not found");
-    }
-    res.render('properties/view_property', { showProperty });
-}));
-
-
-// Create route
-app.post("/propertyList", validateProperty,wrapeAsync (async (req, res) => {
-  if(!req.body.property){
-    throw new ExpressError(400,"send valid data for listing your property");
-  }
-  const newProperty = new Property(req.body.property);
-  await newProperty.save();
-  res.redirect("/propertyList");
-}));
-
-// Render edit form route
-app.get("/properties/:id/edit", wrapeAsync (async (req, res) => {
-  let { id } = req.params;
-  const showProperty = await Property.findById(id);
-  res.render("properties/edit.ejs", { showProperty });
-}));
-
-// Update route
-app.put("/properties/:id", validateProperty,wrapeAsync(async (req, res) => {
-  let { id } = req.params;
-  await Property.findByIdAndUpdate(id, { ...req.body.property });
-  res.redirect(`/properties/${id}`);
-}));
-
-// Delete route
-app.delete("/properties/:id", wrapeAsync(async (req, res) => {
-  let { id } = req.params;
-  await Property.findByIdAndDelete(id);
-  res.redirect("/propertyList");
-}));
-
-//review post route
-app.post("/properties/:id/reviews" , validateReview,wrapeAsync(async(req,res)=>{
-
-  let showreview= await Property.findById(req.params.id);
-  let newReview= new Review(req.body.review);
-  showreview.reviews.push(newReview);
-  await newReview.save();
-  await showreview.save();
-  console.log("new review is saved");
-  res.redirect(`/properties/${req.params.id}`);
-
-}));
-
-//delete review route
-
-app.delete("/properties/:id/reviews/:reviewId", wrapAsync(async(req,res)=>{
-  let {id,reviewId}=req.params;
-  await Property.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
-  await Review.findByIdAndDelete(reviewId);
-  res.redirect(`/properties/${id}`);
-}));
-
-//end here-----
-
-//--------end here-------//
-
-
 
 // Signup user
 app.get("/signup", (req, res) => {
@@ -179,10 +83,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const { username, email, password, phone, role } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword, phone, role });
-  await newUser.save();
+  
   res.redirect("/propertyList");
 });
 
@@ -194,26 +95,10 @@ app.get("/login", (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-
-  try {
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ userId: user._id, username: user.username }, JWT_SECRET, { expiresIn: "1h" });
-      res.cookie("token", token, { httpOnly: true });
-      res.redirect("/propertyList");
-    } else {
-      res.redirect("/login");
-    }
-    
-  } catch (error) {
-    return res.render("signin" , {
-      error : "Incorrect Email or Password" ,
-    });
-  }
 });
 
 // Logout route
 app.get("/logout", (req, res) => {
-  res.clearCookie("token");
   res.redirect("/properties");
 });
 
