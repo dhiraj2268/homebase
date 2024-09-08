@@ -4,6 +4,7 @@
     const ExpressError= require("../utils/ExpressError.js");
     const {propertySchema}=require("../schema.js");
     const Property = require("../models/property.js");
+    const {isLoggedIn}=require("../middleware.js");
 
 
 
@@ -27,14 +28,14 @@
     }));
     
     // New property form route
-    router.get("/propertyList/new", (req, res) => {
+    router.get("/propertyList/new", isLoggedIn,(req, res) => {
         res.render("properties/add_new.ejs");
     });
     
     // Show route 
-    router.get("/:id", wrapeAsync(async (req, res) => {
+    router.get("/:id", isLoggedIn,wrapeAsync(async (req, res) => {
         const { id } = req.params;
-        const showProperty = await Property.findById(id).populate("reviews");
+        const showProperty = await Property.findById(id).populate("reviews").populate("owner");
         if (!showProperty) {
             return res.status(404).send("Property not found");
         }
@@ -43,7 +44,7 @@
     
     
     // Create property route
-    router.post("/propertyList", validateProperty,wrapeAsync (async (req, res) => {
+    router.post("/propertyList", isLoggedIn,validateProperty,wrapeAsync (async (req, res) => {
         if(!req.body.property){
         throw new ExpressError(400,"send valid data for listing your property");
         }
@@ -54,14 +55,14 @@
     }));
     
     // Render edit form route
-    router.get("/:id/edit", wrapeAsync (async (req, res) => {
+    router.get("/:id/edit", isLoggedIn,wrapeAsync (async (req, res) => {
         let { id } = req.params;
         const showProperty = await Property.findById(id);
         res.render("properties/edit.ejs", { showProperty });
     }));
     
     // Update route
-    router.put("/:id", validateProperty,wrapeAsync(async (req, res) => {
+    router.put("/:id", isLoggedIn,validateProperty,wrapeAsync(async (req, res) => {
         let { id } = req.params;
         await Property.findByIdAndUpdate(id, { ...req.body.property });
         // req.flash("success","changes has been added");
@@ -69,7 +70,7 @@
     }));
     
     // Delete route
-    router.delete("/:id", wrapeAsync(async (req, res) => {
+    router.delete("/:id", isLoggedIn,wrapeAsync(async (req, res) => {
         let { id } = req.params;
         await Property.findByIdAndDelete(id);
         req.flash("success","your property has been deleted successfully!");

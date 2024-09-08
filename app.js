@@ -1,17 +1,23 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const User = require("./models/user.js");
-const Contact = require("./models/contactUs.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError= require("./utils/ExpressError.js");
 const cookieParser = require("cookie-parser");
-const properties=require("./routes/propertyRoute.js");
-const reviews=require("./routes/reviewRoute.js");
 const session=require("express-session");
 const flash=require("connect-flash");
+const passport=require("passport");
+const LocalStratergy=require("passport-local");
+const User=require("./models/user.js");
+
+
+const propertyRouter=require("./routes/propertyRoute.js");
+const reviewRouter=require("./routes/reviewRoute.js");
+const userRouter= require("./routes/userRoute.js");
+const contactRouter=require("./routes/contactRoute.js");
+
 
 
 
@@ -64,60 +70,30 @@ app.get("/",(req,res)=>{
 app.use(session(sessionOption));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStratergy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
+  res.locals.error=req.flash("error");
+  res.locals.currUser=req.user;
   next();
-})
+});
 
 
-app.use("/properties",properties);
-app.use("/properties/:id/reviews",reviews);
+app.use("/properties",propertyRouter);
+app.use("/properties/:id/reviews",reviewRouter);
+app.use("/",userRouter);
+app.use("/",contactRouter);
+// app.use("/properties/contact",contactInfo);
 // Home route
 app.get("/properties", (req, res) => {
   res.render("properties/index.ejs");
 });
-
-// Signup user
-app.get("/signup", (req, res) => {
-  res.render("users/signup.ejs");
-});
-
-app.post("/signup", async (req, res) => {
-  
-  res.redirect("/propertyList");
-});
-
-// User login routes
-app.get("/login", (req, res) => {
-  res.render("users/login.ejs");
-});
-
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-});
-
-// Logout route
-app.get("/logout", (req, res) => {
-  res.redirect("/properties");
-});
-
-// Contact us form
-app.get('/contact', (req, res) => {
-  res.render("properties/contactus.ejs", { user: req.user });
-});
-app.post("/contact", async (req, res) => {
-  try {
-      const contactData = new Contact(req.body); 
-      await contactData.save(); 
-      console.log(contactData);
-      res.redirect("properties/contactus.ejs"); 
-  } catch (error) {
-      console.error("Error while saving contact form data:", error);
-      res.status(500).send("There was an error submitting your message.");
-  }
-});
-
 //---------------
 app.all("*",(req,res,next)=>{
   next(new ExpressError(404,"page not found"));

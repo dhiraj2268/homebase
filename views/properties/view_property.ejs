@@ -130,6 +130,8 @@
 
         <!-- review section -->
         <hr>
+        <h3>ownered by : <%= showProperty.owner.username %></h3>
+        
         <div class="review">
           <h4>Leave a review</h4>
           <form action="/properties/<%= showProperty._id %>/reviews" method="post" class="review-form">

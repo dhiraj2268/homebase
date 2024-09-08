@@ -67,7 +67,7 @@ label {
   font-size: 18px; /* Adjust icon size */
 }
 
-input[type="email"],
+input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 12px 12px 12px 45px; /* Ensure padding accommodates the icon */

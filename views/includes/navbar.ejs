@@ -51,9 +51,8 @@
               </a>
             </li>
           </ul>
-
-          <button class="header-top-btn"><a href="/properties/propertyList/new" style="color: aliceblue;">Add Listing</a></button>
-          <button class="header-top-btn"><a href="/logout" style="color: aliceblue;">Logout</a></button>
+          <!-- <button class="header-top-btn"><a href="/propertyList/new" style="color: aliceblue;">Add Listing</a></button> -->
+          <!-- <button class="header-top-btn"><a href="/logout" style="color: aliceblue;">Logout</a></button> -->
         </div>
       </div>
     </div>
@@ -117,7 +116,7 @@
             <span>Search</span>
           </button>
 
-          <button
+          <!-- <button
             type="button"
             class="header-bottom-actions-btn"
             aria-label="Profile"
@@ -126,14 +125,35 @@
             <ion-icon name="person-outline"></ion-icon>
 
             <span>Profile</span>
-          </button>
-
+          </button> -->
+          
           <button class="header-bottom-actions-btn" aria-label="Cart">
             <ion-icon name="cart-outline"></ion-icon>
 
             <span>Cart</span>
           </button>
 
+          <% if(!currUser) {%>
+          <button
+            type="button"
+            class="header-bottom-actions-btn"
+            aria-label="Profile"
+            onclick="location.href='/login'"
+          >
+            <ion-icon name="person-outline"></ion-icon>
+            <span>Profile</span>
+          </button>
+          <% } %>
+          <% if(currUser) {%>
+          <button
+            type="button"
+            class="header-bottom-actions-btn"
+            aria-label="Profile"
+            onclick="location.href='/logout'">
+          <ion-icon name="power"></ion-icon>
+            <span>logout</span>
+          </button>
+          <% } %>
           <button
             class="header-bottom-actions-btn"
             data-nav-open-btn

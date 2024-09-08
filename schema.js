@@ -22,3 +22,11 @@ module.exports.reviewSchema=Joi.object({
         comment:Joi.string().required(),
     }).required(),
 });
+
+module.exports.contactSchema=Joi.object({
+    Contact:Joi.object({
+        name:Joi.string().required(),
+        email:Joi.string().required(),
+        subject:Joi.string().required(),
+    }).required(),
+});
