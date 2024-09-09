@@ -5,7 +5,7 @@ function showPropertyDetails() {
   
     // Set the image source and other details (you can add more logic if you have multiple properties)
     document.getElementById("modal-property-image").src =
-      "./assets/images/property-4.png"; // Update this with the correct image path
+      "/images/property-4.png"; // Update this with the correct image path
   
     // Show the modal
     modal.style.display = "block";

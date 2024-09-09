@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !="production"){
+  require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -94,6 +98,9 @@ app.use("/",contactRouter);
 app.get("/properties", (req, res) => {
   res.render("properties/index.ejs");
 });
+app.get("/seller" , (req,res)=>{
+  res.render("properties/sellerDashboard.ejs");
+})
 //---------------
 app.all("*",(req,res,next)=>{
   next(new ExpressError(404,"page not found"));

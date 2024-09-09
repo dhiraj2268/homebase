@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seller Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/sellerDashboard.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">HomeBase</a>
+        <ul class="nav-links">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Manage Listings</a></li>
+          <li><a href="#">Reviews</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <section class="dashboard">
+      <div class="container">
+        <h2 class="dashboard-title">Seller Dashboard</h2>
+
+        <div class="dashboard-actions">
+          <a href="#" class="action-btn add-property-btn">
+            <i class="fas fa-plus"></i> Add New Property
+          </a>
+          <a href="#" class="action-btn manage-properties-btn">
+            <i class="fas fa-cogs"></i> Manage Properties
+          </a>
+          <a href="#" class="action-btn view-reviews-btn">
+            <i class="fas fa-star"></i> View Reviews
+          </a>
+        </div>
+
+        <div class="dashboard-content">
+          <div class="property-list">
+            <h3>My Properties</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Property Title</th>
+                  <th>Price</th>
+                  <th>Location</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Luxury Villa in Rego Park</td>
+                  <td>$34,900</td>
+                  <td>Belmont Gardens, Chicago</td>
+                  <td>
+                    <a href="#" class="btn edit-btn"
+                      ><i class="fas fa-edit"></i> Edit</a
+                    >
+                    <a href="#" class="btn delete-btn"
+                      ><i class="fas fa-trash"></i> Delete</a
+                    >
+                  </td>
+                </tr>
+                <!-- Repeat for other properties -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="/js/sellerDashboard.js"></script>
+  </body>
+</html>

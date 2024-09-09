@@ -2,21 +2,12 @@
     const router=express.Router();
     const wrapeAsync= require("../utils/wrapAsync.js");
     const ExpressError= require("../utils/ExpressError.js");
-    const {propertySchema}=require("../schema.js");
     const Property = require("../models/property.js");
-    const {isLoggedIn}=require("../middleware.js");
+    const {isLoggedIn,validateProperty}=require("../middleware.js");
+    const multer=require("multer");
+    const {storage}=require("../cloudConfig.js");
+    const upload=multer({storage});
 
-
-
-    const validateProperty=(req,res,next)=>{
-        let{error}=propertySchema.validate(req.body);
-        if(error){
-        let errMsg= error.details.map((el)=>el.message).join(",");
-        throw new ExpressError(400, errMsg);
-        }else{
-        next();
-        }
-    }
 
 
     //all routes start here-----
@@ -35,7 +26,9 @@
     // Show route 
     router.get("/:id", isLoggedIn,wrapeAsync(async (req, res) => {
         const { id } = req.params;
-        const showProperty = await Property.findById(id).populate("reviews").populate("owner");
+        const showProperty = await Property.findById(id).populate({path:"reviews",populate:{path:"author"},}).populate("owner");
+        // .populate({path:"reviews", populate:{path:"author",}})
+        // .populate("owner"); 
         if (!showProperty) {
             return res.status(404).send("Property not found");
         }
@@ -44,11 +37,15 @@
     
     
     // Create property route
-    router.post("/propertyList", isLoggedIn,validateProperty,wrapeAsync (async (req, res) => {
+    router.post("/propertyList", isLoggedIn,upload.single('property[image]'),validateProperty,wrapeAsync (async (req, res) => {
         if(!req.body.property){
         throw new ExpressError(400,"send valid data for listing your property");
         }
+        let url=req.file.path;
+        let filename=req.file.filename;
         const newProperty = new Property(req.body.property);
+        newProperty.owner = req.user._id;
+        newProperty.image={url,filename};
         await newProperty.save();
         req.flash("success","New Property has  been added successfully!");
         res.redirect("/properties/propertyList");
@@ -58,14 +55,24 @@
     router.get("/:id/edit", isLoggedIn,wrapeAsync (async (req, res) => {
         let { id } = req.params;
         const showProperty = await Property.findById(id);
-        res.render("properties/edit.ejs", { showProperty });
+
+        let originalImageUrl=showProperty.image.url;
+        originalImageUrl=originalImageUrl.replace("/upload","/upload/h_300,w_250");
+        res.render("properties/edit.ejs", { showProperty ,originalImageUrl});
     }));
     
     // Update route
-    router.put("/:id", isLoggedIn,validateProperty,wrapeAsync(async (req, res) => {
+    router.put("/:id", isLoggedIn,upload.single('property[image]'),validateProperty,wrapeAsync(async (req, res) => {
         let { id } = req.params;
-        await Property.findByIdAndUpdate(id, { ...req.body.property });
-        // req.flash("success","changes has been added");
+       let updateProperty= await Property.findByIdAndUpdate(id, { ...req.body.property });
+       if(typeof req.file !=="undefined"){
+        let url=req.file.path;
+        let filename=req.file.filename;
+        updateProperty.image={url,filename};
+        await updateProperty.save();
+       }
+        
+        
         res.redirect(`/properties/${id}`);
     }));
     

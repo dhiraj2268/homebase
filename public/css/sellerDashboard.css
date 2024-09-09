@@ -1,0 +1,250 @@
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar {
+    background-color: #003366;
+    color: #fff;
+    padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .navbar .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+  
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+  
+  .nav-links li {
+    margin-left: 20px;
+  }
+  
+  .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+  }
+  
+  .nav-links a::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+  }
+  
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+  
+  .dashboard {
+    padding: 40px 20px;
+  }
+  
+  .dashboard-title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #003366;
+    font-weight: 700;
+  }
+  
+  .dashboard-actions {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .action-btn {
+    display: inline-block;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #003366, #0066cc);
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  .action-btn:hover {
+    background: linear-gradient(135deg, #002244, #005bb5);
+    transform: scale(1.05);
+  }
+  
+  .dashboard-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .property-list h3 {
+    font-size: 1.8rem;
+    color: #003366;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #003366;
+    padding-bottom: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead {
+    background: #003366;
+    color: #fff;
+  }
+  
+  thead th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tbody td {
+    padding: 15px;
+    font-size: 1rem;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  .edit-btn {
+    background: #007bff;
+  }
+  
+  .edit-btn:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  .delete-btn {
+    background: #dc3545;
+  }
+  
+  .delete-btn:hover {
+    background: #c82333;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .navbar .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .nav-links {
+      margin-top: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .nav-links li {
+      margin-left: 0;
+      margin-bottom: 10px;
+    }
+  
+    .dashboard-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .action-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard {
+      padding: 20px;
+    }
+  
+    .dashboard-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+  
+    .dashboard-content {
+      padding: 20px;
+    }
+  
+    .property-list h3 {
+      font-size: 1.5rem;
+    }
+  
+    table {
+      font-size: 0.9rem;
+    }
+  
+    .action-btn {
+      font-size: 0.9rem;
+      padding: 12px 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .navbar .logo {
+      font-size: 1.5rem;
+    }
+  
+    .action-btn {
+      padding: 10px 15px;
+      font-size: 0.8rem;
+    }
+  
+    .property-list h3 {
+      font-size: 1.3rem;
+    }
+  
+    table {
+      font-size: 0.8rem;
+    }
+  
+    .btn {
+      padding: 8px 12px;
+    }
+  }
+  
