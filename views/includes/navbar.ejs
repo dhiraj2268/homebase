@@ -50,6 +50,13 @@
                 <ion-icon name="logo-pinterest"></ion-icon>
               </a>
             </li>
+            <li>
+              <a href="#" class="header-top-social-link">
+                <% if (currUser) { %>
+                 <p>User@ <%= currUser.username %></p> 
+                <% } %>
+              </a>
+            </li>
           </ul>
           <!-- <button class="header-top-btn"><a href="/propertyList/new" style="color: aliceblue;">Add Listing</a></button> -->
           <!-- <button class="header-top-btn"><a href="/logout" style="color: aliceblue;">Logout</a></button> -->
