@@ -7,6 +7,9 @@
     const multer=require("multer");
     const {storage}=require("../cloudConfig.js");
     const upload=multer({storage});
+    const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+    const mapToken=process.env.MAP_TOKEN;
+    const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 
 
@@ -26,18 +29,24 @@
     // Show route 
     router.get("/:id", isLoggedIn,wrapeAsync(async (req, res) => {
         const { id } = req.params;
-        const showProperty = await Property.findById(id).populate({path:"reviews",populate:{path:"author"},}).populate("owner");
+        const property = await Property.findById(id).populate({path:"reviews",populate:{path:"author"},}).populate("owner");
         // .populate({path:"reviews", populate:{path:"author",}})
         // .populate("owner"); 
-        if (!showProperty) {
+        if (!property) {
             return res.status(404).send("Property not found");
         }
-        res.render('properties/view_property', { showProperty });
+        res.render('properties/view_property', { property });
     }));
     
     
     // Create property route
     router.post("/propertyList", isLoggedIn,upload.single('property[image]'),validateProperty,wrapeAsync (async (req, res) => {
+
+        let response= await geocodingClient.forwardGeocode({
+            query:req.body.property.location,
+            limit:1,
+        }).send();
+
         if(!req.body.property){
         throw new ExpressError(400,"send valid data for listing your property");
         }
@@ -46,6 +55,8 @@
         const newProperty = new Property(req.body.property);
         newProperty.owner = req.user._id;
         newProperty.image={url,filename};
+
+        newProperty.geometry=response.body.features[0].geometry;
         await newProperty.save();
         req.flash("success","New Property has  been added successfully!");
         res.redirect("/properties/propertyList");
@@ -54,11 +65,11 @@
     // Render edit form route
     router.get("/:id/edit", isLoggedIn,wrapeAsync (async (req, res) => {
         let { id } = req.params;
-        const showProperty = await Property.findById(id);
+        const property = await Property.findById(id);
 
-        let originalImageUrl=showProperty.image.url;
+        let originalImageUrl=property.image.url;
         originalImageUrl=originalImageUrl.replace("/upload","/upload/h_300,w_250");
-        res.render("properties/edit.ejs", { showProperty ,originalImageUrl});
+        res.render("properties/edit.ejs", { property ,originalImageUrl});
     }));
     
     // Update route

@@ -1,29 +1,20 @@
-// Assuming you have a way to select or identify the property image
-function showPropertyDetails() {
-    // Get the modal element
-    const modal = document.getElementById("propertyModal");
-  
-    // Set the image source and other details (you can add more logic if you have multiple properties)
-    document.getElementById("modal-property-image").src =
-      "/images/property-4.png"; // Update this with the correct image path
-  
-    // Show the modal
-    modal.style.display = "block";
-  }
-  
-  function closePropertyDetails() {
-    // Get the modal element
-    const modal = document.getElementById("propertyModal");
-  
-    // Hide the modal
-    modal.style.display = "none";
-  }
-  
-  // Optional: Close modal when clicking outside of the modal content
-  window.onclick = function (event) {
-    const modal = document.getElementById("propertyModal");
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  };
-  
+function showPropertyDetails(property) {
+  // Get the modal element
+  const modalElement = document.getElementById("propertyModal");
+
+  // Set the image source and other details dynamically
+  document.getElementById("modal-property-image").src = property.image;
+  document.querySelector(".modal-title").textContent = property.title;
+  document.querySelector(".modal-body p:nth-of-type(1)").textContent = `Location: ${property.location}`;
+  document.querySelector(".modal-body p:nth-of-type(2)").textContent = `Price: ${property.price}/Month`;
+  document.querySelector(".modal-body p:nth-of-type(3)").textContent = `Description: ${property.description}`;
+  document.querySelector(".modal-body p:nth-of-type(4)").textContent = `Bedrooms: ${property.bedrooms}`;
+  document.querySelector(".modal-body p:nth-of-type(5)").textContent = `Bathrooms: ${property.bathrooms}`;
+  document.querySelector(".modal-body p:nth-of-type(6)").textContent = `Square Ft: ${property.squarefeet}`;
+
+  // Show the modal using Bootstrap's modal function
+  const modal = new bootstrap.Modal(modalElement);
+  modal.show();
+}
+
+// Optionally: Close the modal when clicking outside of the modal content (handled by Bootstrap by default)

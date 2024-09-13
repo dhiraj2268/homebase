@@ -16,7 +16,7 @@ router.post("/" , isLoggedIn,validateReview,wrapeAsync(async(req,res)=>{
   showreview.reviews.push(newReview);
   await newReview.save();
   await showreview.save();
-  console.log("new review is saved");
+  req.flash("success","review added successfully");
   res.redirect(`/properties/${req.params.id}`);
 
 }));

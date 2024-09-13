@@ -417,6 +417,14 @@
     text-decoration: underline;
   }
   
+/* map styling */
+
+
+#map{
+  height: 400px;
+  width: 80vh;
+}
+
 
   /* show review end */
 

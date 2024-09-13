@@ -1,212 +1,257 @@
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Property</title>
-      <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"> -->
-      <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
-      <link rel="stylesheet" href="/css/property.css" />
-      <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons.js"></script>
-    </head>
-    <body>
-      <section class="property">
-        <div class="container">
-          <p class="section-subtitle">Properties</p>
-          <h2 class="section-title">Featured listing</h2>
-  
-          <ul>
-            <li>
-              <div class="property-card">
-                <figure class="card-banner">
-                  <a href="#">
-                    <img
-                      src="<%= showProperty.image.url %>"
-                      alt="Luxury villa in Rego Park"
-                      class="w-100"
-                    />
-                  </a>
-  
-                  <div class="card-badge">For Rent</div>
-  
-                  <div class="banner-actions">
-                    <button class="banner-actions-btn">
-                      <ion-icon name="location"></ion-icon>
-                      <address>Dev nagar, lane no. 1</address>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Property</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons.js"></script>
+    <link rel="stylesheet" href="/css/rating.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+  </head>
+  <script>
+    const mapToken="<%= process.env.MAP_TOKEN %>";
+    const property= <%- JSON.stringify(property) %>;
+  </script>
+  <body>
+    <%- include("../includes/navbar2.ejs")  %>
+    <%- include("../includes/flash.ejs")  %>
+    <section class="property py-5">
+      <div class="container">
+        <p class="text-muted text-uppercase text-center">Properties</p>
+        <h2 class="text-center mb-5">Featured Listing</h2>
+
+        <ul class="list-unstyled">
+          <li>
+            <div class="card shadow-sm mb-5">
+              <figure class="card-img-top">
+                <a href="#">
+                  <img
+                    src="<%= property.image.url %>"
+                    alt="Luxury villa in Rego Park"
+                    class="img-fluid w-100"
+                  />
+                </a>
+                <div class="position-absolute top-0 start-0 badge bg-success">
+                  For Rent
+                </div>
+              </figure>
+
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <button class="btn btn-outline-secondary">
+                    <ion-icon name="location"></ion-icon>
+                    <address class="mb-0">Dev Nagar, Lane no. 1</address>
+                  </button>
+                  <div>
+                    <button class="btn btn-outline-secondary me-2">
+                      <ion-icon name="camera"></ion-icon> 4
                     </button>
-  
-                    <button class="banner-actions-btn">
-                      <ion-icon name="camera"></ion-icon>
-                      <span>4</span>
-                    </button>
-  
-                    <button class="banner-actions-btn">
-                      <ion-icon name="film"></ion-icon>
-                      <span>2</span>
+                    <button class="btn btn-outline-secondary">
+                      <ion-icon name="film"></ion-icon> 2
                     </button>
                   </div>
-                </figure>
-  
-                <div class="card-content">
-                  <div class="card-price"><strong><%= showProperty.price %></strong>/Month</div>
-  
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
                   <h3 class="card-title">
-                    <a href="#"><%= showProperty.title %></a>
+                    <a href="#" class="text-decoration-none text-dark"
+                      ><%= property.title %></a
+                    >
                   </h3>
-                  <p class="card-text"><h3>ownered by : <%= showProperty.owner.username %></h3></p>
-                  <p class="card-text">
-                    <%= showProperty.description %>
-                  </p>
-  
-                  <ul class="card-list">
-                    <li class="card-item">
-                      <strong><%= showProperty.bedrooms %></strong>
-                      <ion-icon name="bed-outline"></ion-icon>
-                      <span>Bedrooms</span>
-                    </li>
-                    <li class="card-item">
-                      <strong><%= showProperty.bathrooms %></strong>
-                      <ion-icon name="man-outline"></ion-icon>
-                      <span>Bathrooms</span>
-                    </li>
-                    <li class="card-item">
-                      <strong><%= showProperty.squarefeet %></strong>
-                      <ion-icon name="square-outline"></ion-icon>
-                      <span>Square Ft</span>
-                    </li>
-                  </ul>
-                  <button
-                    class="view-property-btn"
-                    onclick="showPropertyDetails()"
-                  >
-                    View Property
+                  <div class="card-price h4">
+                    <strong><%= property.price %></strong>/Month
+                  </div>
+                </div>
+
+                <p class="card-text">
+                  <strong>Owned by:</strong> <%= property.owner.username %>
+                </p>
+                <p class="card-text">
+                  <%= property.description %>
+                </p>
+
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <strong><%= property.bedrooms %></strong> Bedrooms
+                  </li>
+                  <li class="list-inline-item">
+                    <strong><%= property.bathrooms %></strong> Bathrooms
+                  </li>
+                  <li class="list-inline-item">
+                    <strong><%= property.squarefeet %></strong> Square Ft
+                  </li>
+                </ul>
+                <button class="btn btn-primary mt-3" onclick="showPropertyDetails({
+                  title: '<%= property.title %>',
+                  image: '<%= property.image.url %>',
+                  location: '<%= property.location %>',
+                  price: '<%= property.price %>',
+                  description: '<%= property.description %>',
+                  bedrooms: '<%= property.bedrooms %>',
+                  bathrooms: '<%= property.bathrooms %>',
+                  squarefeet: '<%= property.squarefeet %>'
+                })">View Property</button>
+                
+              </div>
+
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <img
+                    src="/images/author.jpg"
+                    alt="Author"
+                    class="rounded-circle me-2"
+                    width="50"
+                    height="50"
+                  />
+                  <div>
+                    <p class="mb-0">
+                      <a href="#" class="text-decoration-none"
+                        ><%= property.sellername %></a
+                      >
+                    </p>
+                    <a href="tel:+919798511430" class="text-muted"
+                      ><%= property.sellercontact %></a
+                    >
+                  </div>
+                </div>
+
+                <div>
+                  <button class="btn btn-outline-secondary me-2">
+                    <ion-icon name="resize-outline"></ion-icon>
+                  </button>
+                  <button class="btn btn-outline-danger me-2">
+                    <ion-icon name="heart-outline"></ion-icon>
+                  </button>
+                  <button class="btn btn-outline-success">
+                    <ion-icon name="add-circle-outline"></ion-icon>
                   </button>
                 </div>
-  
-                <div class="card-footer">
-                  <div class="card-author">
-                    <figure class="author-avatar">
-                      <img
-                        src="/images/author.jpg"
-                        alt="William Seklo"
-                        class="w-100"
-                      />
-                    </figure>
-  
-                    <div>
-                      <p class="author-name">
-                        <a href="#"><%= showProperty.sellername %></a>
-                      </p>
-  
-                      <p class="author-contact">
-                        <a href="tel:+919798511430"><%= showProperty.sellercontact %></a>
-                      </p>
-                    </div>
-                  </div>
-  
-                  <div class="card-footer-actions">
-                    <button class="card-footer-actions-btn">
-                      <ion-icon name="resize-outline"></ion-icon>
-                    </button>
-  
-                    <button class="card-footer-actions-btn">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-  
-                    <button class="card-footer-actions-btn">
-                      <ion-icon name="add-circle-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
               </div>
-            </li>
-          </ul>
-          <% if(currUser && currUser._id.equals(showProperty.owner._id)) {%>
-          <div class="btns">
-            <a href="/properties/<%= showProperty._id %>/edit" class="edit">edit</a>
-        <form action="/properties/<%= showProperty._id %>?_method=DELETE" method="POST">
-            <button type="submit" class="btn">Delete</button>
-        </form>
+            </div>
+          </li>
+        </ul>
+
+        <% if(currUser && currUser._id.equals(property.owner._id)) { %>
+        <div class="d-flex gap-3">
+          <a href="/properties/<%= property._id %>/edit" class="btn btn-warning"
+            >Edit</a
+          >
+          <form
+            action="/properties/<%= property._id %>?_method=DELETE"
+            method="POST"
+          >
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
         </div>
         <% } %>
-        <hr>
 
-        <!-- review section -->
-        
-        
-        <!-- ----------end here-------- -->
-        </div>
-      </section>
+        <hr />
 
-      <!-- review section -->
-      <section class="review-sec">
-      <div class="review">
-        <h4>Leave a review</h4>
-        <form action="/properties/<%= showProperty._id %>/reviews" method="post" class="review-form">
-          <div class="rev">
-            <label for="rating">Rating</label>
-            <input type="range" name="review[rating]" id="rating" min="1" max="5">
+        <!-- Review section -->
+        <section class="mt-5">
+          <h4>Leave a Review</h4>
+          <form
+            action="/properties/<%= property._id %>/reviews"
+            method="post"
+            class="mb-5"
+          >
+           
+          <div class="mb-3 mt-3">
+            <label for="rating" class="form-label">Rating</label>
+            <fieldset class="starability-slot">
+              <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="comment" class="form-label">Comment</label>
+              <textarea class="form-control" name="review[comment]"
+               id="comment" cols="30" rows="5"
+                required
+                ></textarea>
+                <div class="invalid-feedback">Please add some comments for review</div>
           </div>
-          <div class="rev-w">
-            <label for="comment">Comment</label>
-            <textarea name="review[comment]"  id="comment" cols="70" rows="5" required></textarea>
-          </div>
-          <button class="r-btn">submit</button>
-        </form>
-        
-      </div>
-      <!-- create review end -->
+          <button class="btn btn-outline-dark">Submit</button>
 
-        <!-- show review -->
-      <p><b>All Reviews</b></p>
-      <% for(review of showProperty.reviews) {%>
-      <div class="custom-card">
-        <div class="card-body">
-          <h5 class="card-title">author@ <%= review.author.username %></h5>
-          <p class="card-text"><%=review.comment%></p>
-          <p class="card-text"><%=review.rating%></p>
-          <% if(review.author._id.equals(currUser._id)) { %> 
-            <form action="/properties/<%= showProperty._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
-              <button type="submit">Delete</button>
-            </form>
-            <% } %>
+          </form>
+
+          <div class="row">
+            <p><b>All Reviews</b></p>
+        <% for(review of property.reviews) {%>
+            <div class="card col-5 ms-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@<%= review.author.username %></h5>
+                    <p class="starability-result card-text" data-rating="<%= review.rating %>"> </p>
+                    <p class="card-text"><%= review.comment %></p>
+                </div>
+                <br>
+                <% if (review.author._id.equals(currUser._id)) { %>
+                <form class="mb-3" method="POST" action="/properties/<%= property._id %>/reviews/<%= review._id %>?_method=DELETE">
+                    <button class="btn btn-sm btn-dark">Delete</button>
+                </form>
+                <% } %>
+            </div>
+    
+        <% } %>
+    </div>
+        </section>
+
+        <div class="mb-3 mt-3">
+          <h3>Location of this Property</h3>
+          <div id="map" style="width: 80%; height: 400px;"></div>
         </div>
       </div>
-      <% } %>
-      </section>
-
-      <!-- ---------end---------- -->
-
-
-      <!-- The Modal -->
-      <div id="propertyModal" class="modal">
-        <!-- Modal content -->
+    </section> 
+    <!-- Modal -->
+    <div id="propertyModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
         <div class="modal-content">
-          <span class="close" onclick="closePropertyDetails()">&times;</span>
-          <img
-            id="modal-property-image"
-            src="<%= showProperty.image %>"
-            alt="Property Image"
-            style="
-              width: 100%;
-              height: auto;
-              border-radius: 16px;
-              margin-bottom: 20px;
-            "
-          />
-          <h2><%= showProperty.title %></h2>
-          <p><strong>Location:</strong> <%= showProperty.location %></p>
-          <p><strong>Price:</strong> <%= showProperty.price %>/Month</p>
-          <p>
-            <strong>Description:</strong> <%= showProperty.description %>
-          </p>
-          <p><strong>Bedrooms:</strong> <%= showProperty.bedrooms %></p>
-          <p><strong>Bathrooms:</strong> <%= showProperty.bathrooms %></p>
-          <p><strong>Square Ft:</strong> <%= showProperty.squarefeet %></p>
+          <div class="modal-header">
+            <h5 class="modal-title"><%= property.title %></h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <img
+              id="modal-property-image"
+              src="<%= property.image %>"
+              alt="Property Image"
+              class="img-fluid mb-3"
+            />
+            <p><strong>Location:</strong> <%= property.location %></p>
+            <p><strong>Price:</strong> <%= property.price %>/Month</p>
+            <p><strong>Description:</strong> <%= property.description %></p>
+            <p><strong>Bedrooms:</strong> <%= property.bedrooms %></p>
+            <p><strong>Bathrooms:</strong> <%= property.bathrooms %></p>
+            <p><strong>Square Ft:</strong> <%= property.squarefeet %></p>
+          </div>
         </div>
       </div>
-  
-      <script src="/js/propertyList.js"></script>
-    </body>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/propertyList.js"></script>
+    <script src="/js/map.js"></script>
+  </body>
   </html>
+
