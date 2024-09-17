@@ -14,7 +14,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['buyer', 'seller'],
+        enum: ['renter', 'propertyOwner'],
         required: true
     }
 });

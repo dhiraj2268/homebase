@@ -56,7 +56,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <!-- <tbody>
                 <tr>
                   <td>Luxury Villa in Rego Park</td>
                   <td>$34,900</td>
@@ -70,8 +70,25 @@
                     >
                   </td>
                 </tr>
-                <!-- Repeat for other properties -->
+                
+              </tbody> -->
+
+              <tbody>
+                <% properties.forEach(property => { %>
+                  <tr>
+                    <td><%= property.title %></td>
+                    <td><%= property.price %></td>
+                    <td><%= property.location %></td>
+                    <td>
+                      <a href="/properties/<%= property._id %>/edit" class="btn edit-btn"><i class="fas fa-edit"></i> Edit</a>
+                      <form action="/properties/<%= property._id %>?_method=DELETE" method="POST" style="display:inline;">
+                        <button type="submit" class="btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
               </tbody>
+
             </table>
           </div>
         </div>

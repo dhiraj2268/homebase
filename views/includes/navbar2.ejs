@@ -99,21 +99,14 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/properties/propertyList">Home</a>
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Service</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Property</a>
-            </li> -->
             <li class="nav-item">
               <a class="nav-link" href="/contact">Contact</a>
             </li>
+            <% if (currUser && currUser.role === "propertyOwner") { %>
             <li class="nav-item">
               <a class="nav-link" href="/properties/propertyList/new">Add Property</a>
             </li>
+            <% } %>
           </ul>
         </div>
         <form class="d-flex me-3">
@@ -128,9 +121,11 @@
           </button>
         </form>
         <div class="d-flex">
+          <% if (currUser && currUser.role === "propertyOwner") { %>
           <a href="/seller" class="btn btn-profile me-2"
             ><i class="fas fa-user"></i
           ></a>
+          <% } %>
           <a href="#" class="btn btn-cart"
             ><i class="fas fa-shopping-cart"></i
           ></a>

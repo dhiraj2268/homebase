@@ -29,6 +29,11 @@ const propertySchema=new Schema({
         type:Schema.Types.ObjectId,
         ref:"User",
     },
+    propertyOwner: {
+      type: Schema.Types.ObjectId,
+      ref: "propertyOwner", // Reference to the owner
+      required: true,
+    },
     geometry: {
       type: {
         type: String, // Don't do `{ location: { type: String } }`
@@ -42,9 +47,9 @@ const propertySchema=new Schema({
     }
 });
 
-propertySchema.post("findOneAndDelete", async(showProperty)=>{
-  if(showProperty){
-    await Review.deleteMany({_id : {$in : showProperty.reviews}});
+propertySchema.post("findOneAndDelete", async(property)=>{
+  if(property){
+    await Review.deleteMany({_id : {$in : property.reviews}});
   }
 });
 

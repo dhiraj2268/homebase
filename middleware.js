@@ -49,3 +49,12 @@ module.exports.validateReview=(req,res,next)=>{
       next();
     }
 }
+
+//added
+module.exports.isOwner = (req, res, next) => {
+    if (req.user.role !== "propertyOwner") {
+      req.flash("error", "You don't have permission to add or manage properties.");
+      return res.redirect("/properties/propertyList");
+    }
+    next();
+  };

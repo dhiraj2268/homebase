@@ -21,6 +21,7 @@ const propertyRouter=require("./routes/propertyRoute.js");
 const reviewRouter=require("./routes/reviewRoute.js");
 const userRouter= require("./routes/userRoute.js");
 const contactRouter=require("./routes/contactRoute.js");
+const sellerRoute = require("./routes/sellerRoute.js");
 
 
 
@@ -93,14 +94,15 @@ app.use("/properties",propertyRouter);
 app.use("/properties/:id/reviews",reviewRouter);
 app.use("/",userRouter);
 app.use("/",contactRouter);
+app.use("/seller", sellerRoute);
 // app.use("/properties/contact",contactInfo);
 // Home route
 app.get("/properties", (req, res) => {
   res.render("properties/index.ejs");
 });
-app.get("/seller" , (req,res)=>{
-  res.render("properties/sellerDashboard.ejs");
-})
+// app.get("/seller" , (req,res)=>{
+//   res.render("properties/sellerDashboard.ejs");
+// });
 //---------------
 app.all("*",(req,res,next)=>{
   next(new ExpressError(404,"page not found"));
