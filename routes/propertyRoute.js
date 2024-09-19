@@ -4,7 +4,7 @@
     const ExpressError= require("../utils/ExpressError.js");
     const Property = require("../models/property.js");
     const propertyOwner=require("../models/seller.js");
-    const {isLoggedIn,validateProperty,isOwner}=require("../middleware.js");
+    const {isLoggedIn,validateProperty,ispropertyOwner}=require("../middleware.js");
     const multer=require("multer");
     const {storage}=require("../cloudConfig.js");
     const upload=multer({storage});
@@ -18,12 +18,12 @@
 
     // Index route for property listing
     router.get("/propertyList", wrapeAsync( async (req, res) => {
-        const allListing = await Property.find({});
+        const allListing = await Property.find({}).populate('propertyOwner', 'username');;
         res.render("properties/propertyList.ejs", { allListing });
     }));
     
     // New property form route
-    router.get("/propertyList/new", isLoggedIn,isOwner,(req, res) => {
+    router.get("/propertyList/new", isLoggedIn,ispropertyOwner,(req, res) => {
         res.render("properties/add_new.ejs");
     });
     
@@ -41,7 +41,7 @@
     
     
     // Create property route
-    router.post("/propertyList", isLoggedIn,isOwner,upload.single('property[image]'),validateProperty,wrapeAsync (async (req, res) => {
+    router.post("/propertyList", isLoggedIn,ispropertyOwner,upload.single('property[image]'),validateProperty,wrapeAsync (async (req, res) => {
 
         let response= await geocodingClient.forwardGeocode({
             query:req.body.property.location,

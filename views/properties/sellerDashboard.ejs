@@ -24,6 +24,9 @@
           <li><a href="#">Reviews</a></li>
           <li><a href="#">Profile</a></li>
           <li><a href="/logout">Logout</a></li>
+          <% if (currUser && currUser.role === "propertyOwner") { %>
+          <li>owner@ <%= currUser.username %></li>
+          <% } %>
         </ul>
       </div>
     </nav>
@@ -33,7 +36,7 @@
         <h2 class="dashboard-title">Seller Dashboard</h2>
 
         <div class="dashboard-actions">
-          <a href="#" class="action-btn add-property-btn">
+          <a href="/properties/propertyList/new" class="action-btn add-property-btn">
             <i class="fas fa-plus"></i> Add New Property
           </a>
           <a href="#" class="action-btn manage-properties-btn">
@@ -84,6 +87,9 @@
                       <form action="/properties/<%= property._id %>?_method=DELETE" method="POST" style="display:inline;">
                         <button type="submit" class="btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
                       </form>
+                      <a href="/properties/<%= property._id %>" class="btn edit-btn">
+                        <i class="fas fa-star"></i> Reviews
+                      </a>
                     </td>
                   </tr>
                 <% }) %>
