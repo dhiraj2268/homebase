@@ -78,7 +78,7 @@
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">MyWebsite</a>
+        <a class="navbar-brand" href="/properties">HomeBase</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -109,17 +109,18 @@
             <% } %>
           </ul>
         </div>
-        <form class="d-flex me-3">
+        <form class="d-flex me-3" action="/properties/search" method="GET">
           <input
             class="form-control me-2"
-            type="search"
-            placeholder="Search"
+            type="text"
+            name="location"
+            placeholder="Search by location"
             aria-label="Search"
           />
           <button class="btn btn-search" type="submit">
             <i class="fas fa-search"></i>
           </button>
-        </form>
+        </form>        
         <div class="d-flex">
           <% if (currUser && currUser.role === "propertyOwner") { %>
           <a href="/seller" class="btn btn-profile me-2"

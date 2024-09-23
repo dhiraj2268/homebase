@@ -13,10 +13,12 @@ const propertySchema=new Schema({
       bedrooms:Number,
       bathrooms:Number,
       squarefeet:Number,
-      image: {
-        url: String,
-        filename:String,
-      },
+      image: [
+        {
+          url: String,
+          filename: String
+        }
+      ],
       sellername:String,
       sellercontact:String,
       reviews:[
