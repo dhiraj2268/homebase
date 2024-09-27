@@ -30,7 +30,7 @@
   width: 10rem !important;
   object-fit: cover !important;
   cursor: pointer !important;
-  transition: transform 0.2s linear; !important
+  transition: transform 0.2s linear !important; 
 }
 
 .details .thumb .small-images img:hover {
