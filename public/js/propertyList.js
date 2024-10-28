@@ -17,4 +17,11 @@ function showPropertyDetails(property) {
   modal.show();
 }
 
-// Optionally: Close the modal when clicking outside of the modal content (handled by Bootstrap by default)
+
+// for heart
+document.getElementById("likeButton").addEventListener("click", function () {
+  const heartIcon = document.getElementById("heartIcon");
+  heartIcon.classList.toggle("heart-liked");
+  const isLiked = heartIcon.classList.contains("heart-liked");
+});
+

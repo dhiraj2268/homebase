@@ -11,7 +11,7 @@ body {
 
 .container {
   display: flex !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
   align-items: flex-start !important; /* Align items to the top */
   background-color: #fff !important;
   border-radius: 10px !important;
