@@ -46,7 +46,8 @@ const propertySchema=new Schema({
         type: [Number],
         required: true
       }
-    }
+    },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 propertySchema.post("findOneAndDelete", async(property)=>{

@@ -19,9 +19,28 @@ function showPropertyDetails(property) {
 
 
 // for heart
-document.getElementById("likeButton").addEventListener("click", function () {
-  const heartIcon = document.getElementById("heartIcon");
-  heartIcon.classList.toggle("heart-liked");
-  const isLiked = heartIcon.classList.contains("heart-liked");
-});
+document.addEventListener("DOMContentLoaded", function () {
+  const likeButton = document.querySelector(".like-btn");
+  const likeCount = document.querySelector(".like-count");
 
+  likeButton.addEventListener("click", async function () {
+    const propertyId = this.dataset.propertyId; // Ensure this data attribute is set on the button
+    const isLiked = this.classList.contains("liked"); // Check current like status
+
+    try {
+      const response = await fetch(`/properties/${propertyId}/like`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ liked: !isLiked })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        likeCount.textContent = data.totalLikes;
+        likeButton.classList.toggle("liked", data.liked);  // Toggle liked class
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+});

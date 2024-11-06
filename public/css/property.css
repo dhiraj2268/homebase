@@ -37,10 +37,12 @@
   transform: scale(1.1) !important;
 }
 
-.heart-liked {
-  background-color: red !important;
-  color: white !important; /* Ensures the heart icon remains visible */
-  border-radius: 50% !important; /* Makes the background a circle */
-  padding: 5px !important; /* Adds padding around the icon */
+.like-btn {
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+.like-btn.liked i {
+  color: red !important; /* Change to red when liked */
 }
 

@@ -116,8 +116,9 @@
        }
         
         
-        res.redirect(`/properties/${id}`);
+       res.redirect(`/properties/${id}`);
     }));
+    
     
     // Delete route
     router.delete("/:id", isLoggedIn,wrapeAsync(async (req, res) => {
@@ -127,6 +128,27 @@
         res.redirect("/properties/propertyList");
     }));
 
+    router.post("/:id/like", isLoggedIn, wrapeAsync(async (req, res) => {
+        const { id } = req.params;  // Property ID
+        const userId = req.user._id; // Logged-in user ID
+        
+        const property = await Property.findById(id);
+        if (!property) return res.status(404).json({ message: "Property not found" });
+      
+        // Check if the user has already liked the property
+        const hasLiked = property.likes.includes(userId);
+      
+        if (hasLiked) {
+          // Unlike if already liked
+          property.likes = property.likes.filter((like) => !like.equals(userId));
+        } else {
+          // Like if not already liked
+          property.likes.push(userId);
+        }
+      
+        await property.save();
+        res.json({ success: true, liked: !hasLiked, totalLikes: property.likes.length });
+      }));  
     //--------end -----------
 
     module.exports=router;

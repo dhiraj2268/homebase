@@ -55,7 +55,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <button class="btn btn-outline-secondary">
                     <ion-icon name="location"></ion-icon>
-                    <address class="mb-0">Dev Nagar, Lane no. 1</address>
+                    <address class="mb-0"><%= property.location %></address>
                   </button>
                   <div>
                     <button class="btn btn-outline-secondary me-2">
@@ -134,10 +134,13 @@
                   <button class="btn btn-outline-secondary me-2">
                     <ion-icon name="resize-outline"></ion-icon>
                   </button>
-                  <button id="likeButton" class="btn btn-outline-danger me-2">
-                    <ion-icon name="heart-outline" id="heartIcon"></ion-icon>
-                  </button>
-                  
+
+                  <button class="like-btn <%= property.likes.includes(currUser._id) ? 'liked' : '' %>" 
+                    data-property-id="<%= property._id %>">
+                         <i class="fa fa-heart"></i>
+                 </button>
+                 <span class="like-count"><%= property.likes.length %></span>
+            
                   <button class="btn btn-outline-success">
                     <ion-icon name="add-circle-outline"></ion-icon>
                   </button>
